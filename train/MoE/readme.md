@@ -22,17 +22,20 @@ Our framework addresses the critical challenge in disaster response: **generatin
 
 ```mermaid
 graph TD
-    A[Satellite Image] --> B{Consistency Filter};
-    B -- "GT != Gemini" --> C[Discard (Noise)];
-    B -- "GT == Gemini" --> D[Router Training Data];
+    A[Satellite Image] --> B{Consistency Filter}
+    B -->|"GT != Gemini"| C[Discard / Noise]
+    B -->|"GT == Gemini"| D[Router Training Data]
     
-    D --> E[Train Router (ResNet18)];
+    D --> E[Train Router - ResNet18]
     
-    subgraph "Inference / Generation"
-    F[New Satellite Input] --> E;
-    E -->|Weights| G[Mixture of Experts];
-    G --> H[Expert: Mild];
-    G --> I[Expert: Moderate];
-    G --> J[Expert: Severe];
-    H & I & J --> K[Generated Street View];
+    subgraph Inference ["Inference / Generation"]
+    F[New Satellite Input] --> E
+    E -->|Weights| G[Mixture of Experts]
+    G --> H[Expert: Mild]
+    G --> I[Expert: Moderate]
+    G --> J[Expert: Severe]
+    H --> K[Generated Street View]
+    I --> K
+    J --> K
     end
+```end
