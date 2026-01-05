@@ -1,98 +1,38 @@
+# 🌍 Disaster-MoE: Satellite-to-Street View Synthesis
+> **Decoupling Semantic Texture from Geometric Structure via Consistency-Filtered Mixture of Experts**
 
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Diffusers](https://img.shields.io/badge/🤗%20HuggingFace-Diffusers-yellow)](https://huggingface.co/docs/diffusers/index)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+## 📖 Overview
+
+This repository hosts the official implementation of the **Consistency-Filtered Mixture of Experts (MoE)** pipeline. 
+
+Our framework addresses the critical challenge in disaster response: **generating ground-level street views from post-disaster satellite imagery.** Unlike traditional methods (Pix2Pix, ControlNet) that suffer from "averaging effects" due to viewpoint ambiguity, our approach employs a **Router-Expert architecture**:
+
+1.  **Router (The Brain):** Diagnoses damage severity based purely on visible satellite textures.
+2.  **Experts (The Hands):** Three specialized ControlNets (Mild, Moderate, Severe) generate high-fidelity textures.
+3.  **Consistency Filtering:** A novel data engineering strategy that removes hallucinated labels by aligning Ground Truth with VLM (Gemini) predictions.
 
 ---
 
-# Uncertainty-Aware Mixture of Experts (MoE) Training Pipeline
+## 🏗️ Architecture Pipeline
 
-This directory contains the implementation of the **Consistency-Filtered Mixture of Experts (MoE)** architecture for Satellite-to-Street View synthesis in disaster scenarios.
-
-Unlike standard single-model approaches (e.g., Pix2Pix or vanilla ControlNet), this framework decouples **geometric structure** from **semantic texture** (damage severity) by employing a Router-Expert mechanism. This addresses the "averaging effect" and VLM hallucinations often found in disaster generation tasks.
-
-## 📂 File Structure
-
-| File Name | Description |
-| --- | --- |
-| **`MoE_Consistency_Pipeline.py`** | **The Master Pipeline.** Handles data cleaning, label alignment (Ground Truth vs. Gemini), consistency filtering, dataset splitting, and trains the **Router (ResNet18)**. |
-| **`optimized_expert_trainer.py`** | **The Expert Trainer.** An optimized training script for ControlNet using Gradient Accumulation and xformers to enable efficient fine-tuning on consumer GPUs. |
-| **`run_all_experts.py`** | **The Orchestrator.** A one-click script to sequentially train the three experts (**Mild**, **Moderate**, **Severe**) after the data and Router are prepared. |
-
-## 🚀 Methodology
-
-This pipeline implements a novel three-stage training process:
-
-1. **Consistency Filtering (Data Engineering):**
-* We align Ground Truth (GT) labels with VLM (Gemini) predictions.
-* **filtering Strategy:** Only samples where `GT == Gemini` are retained to train the Router. This removes "noisy" data caused by viewpoint ambiguity (e.g., "pancaking" collapses visible from the street but not from satellite).
-
-
-2. **Router Training (The "Brain"):**
-* A **ResNet18** classifier is trained on the filtered "consistent" dataset.
-* It learns to classify satellite imagery into *Mild*, *Moderate*, or *Severe* based purely on visual texture.
-
-
-3. **Expert Training (The "Hands"):**
-* Three independent **ControlNet** models are trained, each specializing in a specific damage level.
-* *Mild Expert:* Learned on strictly non-damaged structures.
-* *Severe Expert:* Learned on strictly destroyed structures.
-
-
-
-## 🛠️ Usage
-
-### Prerequisites
-
-Ensure you have the necessary dependencies installed:
-
-```bash
-pip install torch torchvision diffusers transformers accelerate pandas opencv-python
-
-```
-
-### Configuration
-
-Before running, open `MoE_Consistency_Pipeline.py` and `run_all_experts.py` to verify your data paths:
-
-```python
-BASE_DIR = r"D:\your_path\data"  # Update this to your local data directory
-
-```
-
-### Step 1: Data Preparation & Router Training
-
-Run the master pipeline to clean data, split datasets, and train the Router.
-
-```bash
-python MoE_Consistency_Pipeline.py
-
-```
-
-*Output:* * Processed CSVs in `moe_processed_data/`
-
-* Trained Router model: `moe_checkpoints/router_consistent.pth`
-
-### Step 2: Train Experts
-
-Once Step 1 is complete, run the orchestration script to train the Mild, Moderate, and Severe experts sequentially.
-
-```bash
-python run_all_experts.py
-
-```
-
-*Output:*
-
-* Trained ControlNet checkpoints in `moe_checkpoints/expert_mild`, `expert_moderate`, and `expert_severe`.
-
-## 📊 Performance Optimization
-
-The `optimized_expert_trainer.py` includes several memory optimizations:
-
-* **Gradient Accumulation:** Simulates a larger batch size (e.g., Batch=4) while physically using Batch=1.
-* **xformers:** Memory-efficient attention (automatically enabled if installed).
-* **FP16 Mixed Precision:** Reduces VRAM usage.
-
-## citation
-
-If you use this code in your research, please cite:
-
-> [Your Name/Lab Name], "Disaster-MoE: Decoupling Semantic Texture from Geometric Structure for Uncertainty-Aware Satellite-to-Street View Synthesis," 2025.
+```mermaid
+graph TD
+    A[Satellite Image] --> B{Consistency Filter};
+    B -- "GT != Gemini" --> C[Discard (Noise)];
+    B -- "GT == Gemini" --> D[Router Training Data];
+    
+    D --> E[Train Router (ResNet18)];
+    
+    subgraph "Inference / Generation"
+    F[New Satellite Input] --> E;
+    E -->|Weights| G[Mixture of Experts];
+    G --> H[Expert: Mild];
+    G --> I[Expert: Moderate];
+    G --> J[Expert: Severe];
+    H & I & J --> K[Generated Street View];
+    end
