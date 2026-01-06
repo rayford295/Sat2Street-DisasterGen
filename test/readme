@@ -1,1 +1,22 @@
+D:\yifan_2025\data\images
+街景和遥感图像都在这里面，
+data/test_split.csv这个是测试集的路径，总共有mild，moderate，severe三类，每个类100个，里面有对应的图像路径
+例如
+sat_path
+/content/sat2street_data/images/003268_sat.png
+svi_path
+/content/sat2street_data/images/003268_svi.png
+severity
+2_SevereDamage
 
+我是用了四种方法，
+D:\yifan_2025\data\output_pix2pix
+D:\yifan_2025\data\output_controlnet_sat2street
+D:\yifan_2025\data\output_controlnet_gemini_prompt
+D:\yifan_2025\data\moe_processed_data
+D:\yifan_2025\data\moe_checkpoints
+
+我想给每个方法生成测试集全部的300张图像，然后将结果存储在D盘
+例如pixpix，然后里面是三个类名的大文件，每个类的大文件里面是一张真实的街景图像，然后是一张对应这个方法的街景图像，
+
+需要注意是生成的街景图像需要还原成真实街景图像的尺寸
