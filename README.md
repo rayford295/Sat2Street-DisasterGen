@@ -67,3 +67,45 @@ graph TD
         J --> K
     end
 
+
+````
+
+---
+
+## 🖼️ Qualitative Results
+
+### Satellite-to-Street View Synthesis Across Damage Severities
+
+The following figure presents a qualitative comparison of synthesized street-view images under **Mild**, **Moderate**, and **Severe** disaster conditions across different generative models.
+
+![Qualitative Comparison](https://raw.githubusercontent.com/rayford295/Sat2Street-DisasterGen/main/Figure/compare%20result.PNG)
+
+**Key observations:**
+
+* **GAN-based models (Pix2Pix)** preserve coarse structural layouts but suffer from blurred textures and limited realism.
+* **Diffusion-based models (SD1.5 + ControlNet)** generate more photorealistic textures, but may hallucinate intact structures in heavily damaged areas.
+* **Semantic guidance (Gemini) and Mixture-of-Experts (MoE)** improve damage-aware synthesis, especially in *moderate* and *severe* disaster scenarios.
+
+---
+
+## 📊 Semantic Consistency Evaluation
+
+To assess whether synthesized images preserve **disaster severity semantics**, we evaluate generated street views using a **ResNet-18 classifier** trained on real post-disaster street-view images.
+
+![Confusion Matrices](https://raw.githubusercontent.com/rayford295/Sat2Street-DisasterGen/main/Figure/confusion_matrices_comparison.png)
+
+**Findings:**
+
+* **SD1.5 + ControlNet** achieves the highest semantic consistency (**F1 ≈ 0.71**), closely approaching real street-view performance.
+* **Pix2Pix** exhibits strong mode collapse, predicting most samples as *Mild* damage.
+* **Gemini-guided and MoE models** show improved visual realism but slightly reduced class separability, indicating a trade-off between perceptual richness and semantic consistency.
+
+
+## 📌 Citation
+
+If you use this code, data, or figures in academic work, please **cite the corresponding paper** or **contact the author** in advance.
+
+This repository and its outputs are intended **for research and academic use only**.
+
+A formal BibTeX citation will be released upon paper acceptance.
+
