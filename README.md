@@ -22,53 +22,48 @@ Unlike repositories that focus on a single model, **this project systematically 
 
 ## 🔍 Evaluated Methods
 
-We benchmark the following representative approaches:
+We benchmark a set of representative **satellite-to-street-view synthesis approaches** under post-disaster scenarios.  
+These methods span conditional GANs, diffusion-based models, semantic-guided generation, and expert-based routing strategies.
 
 ### 1️⃣ Pix2Pix (Conditional GAN)
-- Strong at preserving coarse spatial structure  
+
+- A classical conditional GAN for image-to-image translation  
+- Effective at preserving coarse spatial structure  
 - Prone to texture blurring and mode collapse in complex disaster scenes  
 
 ### 2️⃣ Stable Diffusion 1.5 + ControlNet
-- Geometry-guided diffusion using satellite-derived structural cues  
-- Produces the most visually realistic images overall  
 
-### 3️⃣ ControlNet + VLM Semantic Guidance (Gemini)
-- Injects high-level disaster semantics via vision–language models  
-- Improves damage awareness but may introduce semantic–geometry tension  
+- Diffusion-based generation guided by satellite-derived structural cues  
+- ControlNet enforces geometric consistency between overhead and ground-level views  
+- Produces highly realistic images, but may underestimate fine-grained damage patterns  
 
-### 4️⃣ Disaster-MoE (Mixture of Experts) **[One Method in This Repo]**
+### 3️⃣ ControlNet + Vision–Language Semantic Guidance (Gemini)
+
+- Incorporates high-level disaster semantics via a vision–language model  
+- Improves damage awareness and semantic expressiveness  
+- May introduce semantic–geometry tension when inferred semantics conflict with structural constraints  
+
+### 4️⃣ Disaster-MoE (Mixture of Experts)
+
+- A severity-aware generative variant evaluated in this repository  
 - Decouples geometric structure from semantic texture  
-- Routes samples to severity-specific experts (Mild / Moderate / Severe)  
-- Improves realism and semantic diversity under severe damage conditions  
+- Adapts generation behavior across mild, moderate, and severe damage conditions  
 
-> ⚠️ **Important:**  
-> **Disaster-MoE is one of the evaluated methods**, not the sole contribution of this repository.  
-> The main goal is **comparative analysis and understanding trade-offs** in cross-view disaster synthesis.
+> ⚠️ **Important Note**  
+> Disaster-MoE is included as **one of the evaluated methods**, rather than the sole contribution of this repository.  
+> The primary goal is **comparative benchmarking** and understanding trade-offs among different cross-view disaster synthesis strategies.
 
 ---
 
-## 🧠 Disaster-MoE Architecture (Optional Method)
+## 🧭 Overall Methodology
 
-```mermaid
-graph TD
-    A[Satellite Image] --> B{Consistency Filter}
-    B -->|"GT ≠ Gemini"| C[Discard / Noise]
-    B -->|"GT = Gemini"| D[Clean Training Set]
-    D --> E[Router Training - ResNet18]
+The following figure presents the **unified evaluation framework** adopted in this repository for satellite-to-street-view synthesis under post-disaster scenarios.  
+All evaluated methods share identical satellite inputs, data splits, and evaluation protocols, ensuring a fair and controlled comparison.
 
-    subgraph Inference ["Inference / Generation"]
-        F[Satellite Input] --> E
-        E -->|Routing Weights| G[Mixture of Experts]
-        G --> H[Expert: Mild]
-        G --> I[Expert: Moderate]
-        G --> J[Expert: Severe]
-        H --> K[Generated Street View]
-        I --> K
-        J --> K
-    end
+<p align="center">
+  <img src="Figure/method.drawio.png" alt="Overall methodology for satellite-to-street-view disaster synthesis" width="90%">
+</p>
 
-
-````
 
 ---
 
