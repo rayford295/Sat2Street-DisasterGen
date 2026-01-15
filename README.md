@@ -104,3 +104,7 @@ This repository and its outputs are intended **for research and academic use onl
 
 A formal BibTeX citation will be released upon paper acceptance.
 
+## 🙏 Acknowledgement
+
+This project was supported by the Texas A&M University Environment and Sustainability Initiative (ESI) through the Environment and Sustainability Graduate Fellow Award.
+
