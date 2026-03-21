@@ -1,4 +1,4 @@
-# 🌍 Sat2Street-DisasterGen: Satellite-to-Street View Synthesis for Post-Disaster Assessment
+# 🌍 Satellite-to-Street: Synthesizing Post-Disaster Views from Satellite Imagery via Generative Vision Models
 
 > **A Benchmark Study of Generative Models for Post-Disaster Satellite-to-Street View Synthesis**  
 > *(Including Pix2Pix, Diffusion + ControlNet, VLM-Guided Generation, and Mixture-of-Experts)*
@@ -9,6 +9,11 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
+## 📢 News
+
+🎉 **Paper accepted at IGARSS 2026!**  
+We are excited to announce that our work on **satellite-to-street view synthesis for post-disaster assessment** has been accepted at the  
+**IEEE International Geoscience and Remote Sensing Symposium (IGARSS 2026)**.
 
 ## 📖 Overview
 
