@@ -102,15 +102,31 @@ To assess whether synthesized images preserve **disaster severity semantics**, w
 
 
 ## 📌 Citation
+**BibTeX**
+</td>
+<td>
 
+```bibtex
 @article{yang2026satellite,
   title   = {Satellite-to-Street: Synthesizing Post-Disaster Views from Satellite Imagery via Generative Vision Models},
   author  = {Yang, Yifan and Zou, Lei and Jepson, Wendy},
   journal = {arXiv preprint arXiv:2603.20697},
   year    = {2026}
 }
+```
 
-Yang, Y., Zou, L., & Jepson, W. (2026). Satellite-to-Street: Synthesizing Post-Disaster Views from Satellite Imagery via Generative Vision Models. ArXiv. https://arxiv.org/abs/2603.20697
+
+**Plain Text**
+
+</td>
+<td>
+
+Yang, Y., Zou, L., & Jepson, W. (2026). Satellite-to-Street: Synthesizing Post-Disaster Views from Satellite Imagery via Generative Vision Models. *arXiv preprint arXiv:2603.20697*.
+
+</td>
+</tr>
+<tr>
+<td>
 
 
 ## 🙏 Acknowledgement
